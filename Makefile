@@ -1,22 +1,20 @@
-Q ?= @
 CC := g++
 
-DESTDIR?=bin
-TARGET?=new_learn_opengl
-DISTFILE?=$(DESTDIR)/$(TARGET)
-BIN_DIR?=bin
-BIN?=$(BIN_DIR)/$(TARGET)
-
-SRCDIR := src
+TARGET_EXEC ?= new_learn_open_gl
 BUILDDIR := build
+SRC_DIRS := src
+BIN_DIR?=bin
+BIN?=$(BIN_DIR)/$(TARGET_EXEC)
 
-SRCEXT := cpp
-SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+SOURCES := $(shell find $(SRC_DIRS) -type f -name *.cpp -or -name *.c -or -name *.s)
+TEMP_OBJECTS_C = $(patsubst $(SRC_DIRS)/%.c,$(BUILDDIR)/%.c.o,$(SOURCES))
+TEMP_OBJECTS_S = $(patsubst $(SRC_DIRS)/%.s,$(BUILDDIR)/%.s.o,$(TEMP_OBJECTS_C))
+TEMP_OBJECTS_CPP = $(patsubst $(SRC_DIRS)/%.cpp,$(BUILDDIR)/%.cpp.o,$(TEMP_OBJECTS_S))
+OBJECTS = $(TEMP_OBJECTS_CPP)
 
 CFLAGS := -g -std=c++0x # -Wall
 
-LIB := -lGLEW -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -lSOIL
+LIB := -lGLEW -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -lSOIL -ldl
 INC := -I include
 
 $(BIN): $(OBJECTS)
@@ -24,7 +22,18 @@ $(BIN): $(OBJECTS)
 	@mkdir -p $(BIN_DIR)
 	@echo " $(CC) $^ -o $(BIN) $(LIB)"; $(CC) $^ -o $(BIN) $(LIB)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+#assembly
+$(BUILDDIR)/%.s.o: $(SRC_DIRS)/%.s
+	@mkdir -p $(BUILDDIR)
+	$(AS) $(ASFLAGS) -c $< -o $@
+
+# # c source
+$(BUILDDIR)/%.c.o: $(SRC_DIRS)/%.c
+	@mkdir -p $(BUILDDIR)
+	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+# c++ source
+$(BUILDDIR)/%.cpp.o: $(SRC_DIRS)/%.cpp
 	@mkdir -p $(BUILDDIR)
 	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
