@@ -40,7 +40,7 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath)
 
 void Shader::use()
 {
-
+    glUseProgram(ID);
 }
 
 char* Shader::getFileBuffer(const char* path)
