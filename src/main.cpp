@@ -4,12 +4,20 @@
 #include <iostream>
 #include <stdlib.h>
 
+#include "Shader.hpp"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
+float vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f
+};
 
 int main(int argc, char *argv[])
 {
@@ -34,6 +42,13 @@ int main(int argc, char *argv[])
         std::cout << "Failed to init GLAD" << std::endl;
         exit(-2);
     }
+
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    Shader defaultShader("shaders/default.vertex.glsl", "shaders/default.fragment.glsl");
 
     while (!glfwWindowShouldClose(window))
     {
