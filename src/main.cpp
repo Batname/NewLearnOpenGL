@@ -8,6 +8,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "Shader.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -159,6 +163,15 @@ int main(int argc, char *argv[])
 
         // Activate shader
         defaultShader.use();
+
+        /* ----- Transformation -----*/
+        // Set transformatin matrix
+        glm::mat4 trans;
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        // Load uniform to vertex shader
+        unsigned int transformLoc = glGetUniformLocation(defaultShader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
         // Draw triangles
         glBindVertexArray(VAO);
