@@ -1,12 +1,26 @@
 #!/bin/sh -e
+include_dir='include'
 
 echo "Building New LearnOpenGL"
 
-echo "Install deps"
+echo "[INSTALL]"
 
+echo "[INSTALL] stb_image"
 stb_image='./include/stb_image.h'
 if [ ! -f $stb_image ]; then
     wget https://raw.githubusercontent.com/nothings/stb/master/stb_image.h -P ./include
+fi
+
+echo "[INSTALL] glm math"
+glm="$include_dir/glm"
+glm_version='0.9.8.4'
+glm_arcive="$glm_version.tar.gz"
+if [ ! -d $glm ]; then
+    wget "https://github.com/g-truc/glm/archive/$glm_arcive" -P $include_dir
+    tar xf "$include_dir/$glm_arcive" -C $include_dir
+    mv "$include_dir/glm-$glm_version/glm" $include_dir
+    rm -rf "$include_dir/glm-$glm_version"
+    rm -rf "$include_dir/$glm_arcive"
 fi
 
 make uninstall
