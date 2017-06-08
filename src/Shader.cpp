@@ -125,3 +125,8 @@ void Shader::setFloat(const char* name, float value) const
 {
     glUniform1f(glGetUniformLocation(ID, name), value);
 }
+
+void Shader::setMat4(const char* name, const float *mat4) const
+{
+    glUniformMatrix4fv(glGetUniformLocation(ID, name), 1, GL_FALSE, mat4);
+}

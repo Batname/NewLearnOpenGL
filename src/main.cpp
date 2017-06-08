@@ -179,13 +179,19 @@ int main(int argc, char *argv[])
         defaultShader.use();
 
         /* ----- Transformation -----*/
-        // Set transformatin matrix
-        glm::mat4 trans;
-        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        // Load uniform to vertex shader
-        unsigned int transformLoc = glGetUniformLocation(defaultShader.ID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+        // Model
+        glm::mat4 model;
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        // View
+        glm::mat4 view;
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        // Projection
+        glm::mat4 projection;
+        projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        // Pass matrices to shader program
+        defaultShader.setMat4("model", glm::value_ptr(model));
+        defaultShader.setMat4("view", glm::value_ptr(view));
+        defaultShader.setMat4("projection", glm::value_ptr(projection));
 
         // Draw triangles
         glBindVertexArray(VAO);
