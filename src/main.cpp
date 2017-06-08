@@ -41,6 +41,20 @@ int main(int argc, char *argv[])
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    // Set specific OS glfw Hints
+    #ifdef _WIN64
+       //define something for Windows (64-bit)
+    #elif _WIN32
+       //define something for Windows (32-bit)
+    #elif __APPLE__
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    #elif __linux
+        // linux
+    #elif __unix // all unices not caught above
+        // Unix
+    #elif __posix
+        // POSIX
+    #endif
 
     GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "New OpenGL", NULL, NULL);
     if (window == NULL)

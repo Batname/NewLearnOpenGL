@@ -1,5 +1,7 @@
 CC := g++
 
+UNAME := $(shell uname)
+
 TARGET_EXEC ?= new_learn_open_gl
 BUILDDIR := build
 SRC_DIRS := src
@@ -14,13 +16,21 @@ OBJECTS = $(TEMP_OBJECTS_CPP)
 
 CFLAGS := -g -std=c++0x # -Wall
 
+FRAMEWORK :=
+ifeq ($(UNAME), Linux)
 LIB := -lGLEW -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -lSOIL -ldl
+endif
+ifeq ($(UNAME), Darwin)
+LIB := -lGLEW -lglfw3 -lpthread
+FRAMEWORK := -framework OpenGL
+endif
+
 INC := -I include
 
 $(BIN): $(OBJECTS)
 	@echo " Linking..."
 	@mkdir -p $(BIN_DIR)
-	@echo " $(CC) $^ -o $(BIN) $(LIB)"; $(CC) $^ -o $(BIN) $(LIB)
+	@echo " $(CC) $^ -o $(BIN) $(LIB)"; $(CC) $^ -o $(BIN) $(FRAMEWORK) $(LIB)
 
 #assembly
 $(BUILDDIR)/%.s.o: $(SRC_DIRS)/%.s
