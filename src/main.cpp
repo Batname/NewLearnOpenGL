@@ -72,6 +72,19 @@ unsigned int indices[] = {
 };
 */
 
+glm::vec3 cubePositions[] = {
+  glm::vec3( 0.0f,  0.0f,  0.0f),
+  glm::vec3( 2.0f,  5.0f, -15.0f),
+  glm::vec3(-1.5f, -2.2f, -2.5f),
+  glm::vec3(-3.8f, -2.0f, -12.3f),
+  glm::vec3( 2.4f, -0.4f, -3.5f),
+  glm::vec3(-1.7f,  3.0f, -7.5f),
+  glm::vec3( 1.3f, -2.0f, -2.5f),
+  glm::vec3( 1.5f,  2.0f, -2.5f),
+  glm::vec3( 1.5f,  0.2f, -1.5f),
+  glm::vec3(-1.3f,  1.0f, -1.5f)
+};
+
 int main(int argc, char *argv[])
 {
     glfwInit();
@@ -217,9 +230,6 @@ int main(int argc, char *argv[])
         defaultShader.use();
 
         /* ----- Transformation -----*/
-        // Model
-        glm::mat4 model;
-        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
         // View
         glm::mat4 view;
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -227,14 +237,26 @@ int main(int argc, char *argv[])
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         // Pass matrices to shader program
-        defaultShader.setMat4("model", glm::value_ptr(model));
         defaultShader.setMat4("view", glm::value_ptr(view));
         defaultShader.setMat4("projection", glm::value_ptr(projection));
 
         // Draw triangles
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        size_t i;
+        size_t len = sizeof(cubePositions) / sizeof(glm::vec3);
+        for (i = 0; i < len; i++)
+        {
+            // Model
+            glm::mat4 model;
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0f * i;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
+            // Set to shader program
+            defaultShader.setMat4("model", glm::value_ptr(model));
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
