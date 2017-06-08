@@ -195,6 +195,9 @@ int main(int argc, char *argv[])
     defaultShader.setInt("texture1", 0);
     defaultShader.setInt("texture2", 1);
 
+    // Prerender openGL options
+    glEnable(GL_DEPTH_TEST);
+
 
     while (!glfwWindowShouldClose(window))
     {
@@ -202,7 +205,7 @@ int main(int argc, char *argv[])
 
         // Render
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Bind textures
         glActiveTexture(GL_TEXTURE0);
