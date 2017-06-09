@@ -16,6 +16,7 @@ public:
     void setInt(const char* name, int value) const;
     void setFloat(const char* name, float value) const;
     void setMat4(const char* name, const float *mat4) const;
+    void setVec3(const char* name, float v1, float v2, float v3) const;
 private:
     enum constants
     {
