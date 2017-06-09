@@ -86,18 +86,7 @@ glm::vec3 cubePositions[] = {
   glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
-int main()
-{
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-
-    std::cout << "cameraPos " << glm::to_string(cameraPos) << std::endl;
-    std::cout << "cameraDirection " << glm::to_string(cameraDirection) << std::endl;
-    return 0;
-}
-
-int main1(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
