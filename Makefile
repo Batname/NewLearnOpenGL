@@ -14,7 +14,7 @@ TEMP_OBJECTS_S = $(patsubst $(SRC_DIRS)/%.s,$(BUILDDIR)/%.s.o,$(TEMP_OBJECTS_C))
 TEMP_OBJECTS_CPP = $(patsubst $(SRC_DIRS)/%.cpp,$(BUILDDIR)/%.cpp.o,$(TEMP_OBJECTS_S))
 OBJECTS = $(TEMP_OBJECTS_CPP)
 
-CFLAGS := -g -std=c++0x # -Wall
+CFLAGS := -g -std=c++11 # -Wall
 
 FRAMEWORK :=
 ifeq ($(UNAME), Linux)
