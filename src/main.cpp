@@ -167,8 +167,10 @@ int main(int argc, char *argv[])
 
     /* ----- Load texture ----- **/
     unsigned int diffuseMap = loadTexture("./textures/container2.png");
+    unsigned int specularMap = loadTexture("./textures/container2_specular.png");
     lightingShader.use();
     lightingShader.setInt("material.diffuse", 0);
+    lightingShader.setInt("material.specular", 1);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -195,7 +197,6 @@ int main(int argc, char *argv[])
         lightingShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);
         lightingShader.setVec3("viewPos", glm::value_ptr(camera.Position));
 
-        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
         lightingShader.setFloat("material.shininess", 32.0f);
 
         lightingShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
@@ -211,6 +212,12 @@ int main(int argc, char *argv[])
         // world transformation
         glm::mat4 model;
         lightingShader.setMat4("model", glm::value_ptr(model));
+
+        // bind diffuse map
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, specularMap);
 
         // render the cube
         glBindVertexArray(cubeVAO);
